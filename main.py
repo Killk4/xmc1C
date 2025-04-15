@@ -1,82 +1,23 @@
-import os
-import re
-import configparser
+import sys
+import AccHelper
+import ui.main_ui as mui
+from PyQt5 import QtWidgets
 
-# Инициализация файла конфигурации
-config = configparser.ConfigParser()
+config_soft = AccHelper.Config().read_config_file()
+xml = AccHelper.XML(config_soft)
+branches = AccHelper.Branches(config_soft)
 
-# Пытаемся прочитать файл конфигурации
-config.read('config.ini')
+# result = xml.autofind_xml(branches.getBranchesName(), config_soft['SETTINGS']['months_path'])
+# print(result)
 
-# Если удалось, то работаем с ним
-try:
-    if(config['CONFIG']):
-        pass
-# Иначе создаём
-except:
-    config['BRANCHES'] = {
-        'barnches' : 'barnches',
-        'JK' : 'ЖК',
-        'IL' : 'ил',
-        'KB' : 'КБ',
-        'KV' : 'Кирова',
-        'KP' : 'Крупской',
-        'NR' : 'Нарат',
-        'PK' : 'ПК',
-        'SL' : 'Салют',
-        'SK' : 'СКФНКЦ',
-        'SM' : 'Смена',
-        'UN' : 'Юность'
-    }
+app = QtWidgets.QApplication(sys.argv)
+MainWindow = QtWidgets.QMainWindow()
 
-    config['INFO'] = {
-        'info' : 'info',
-        'version' : '1.0.0',
-        'release_date' : '2025-04-14'
-    }
+main_ui = mui.Ui_MainWindow(month_default=3,
+                       font=config_soft['SETTINGS']['font_family'],
+                       font_size=int(config_soft['SETTINGS']['font_size']))
 
-    config['SETTINGS'] = {
-        'settings' : 'settings',
-        'font_family' : 'Tahoma',
-        'font_size' : '14',
-        'server_updates' : '127.0.0.1',
-        'ftp_user' : 'xml_user',
-        'ftp_pass' : 'xml_password',
-        'months_path' : './months/'
-    }
+main_ui.setupUi(MainWindow)
+MainWindow.show()
 
-    # Запись стандартных настроек конфигурации в ini файл
-    with open('client_config.ini', 'w') as configfile:
-        config.write(configfile)
-
-
-
-def autofind_xml(branches: list)-> list:
-    '''Автовыбор (сопоставление) имён файлов с названиями филиалов'''
-    # Получаем список файлов
-    files = os.listdir()
-
-    xml_files = ['name:file']
-
-    # Сопоставуляем файлы с названиями ветвей
-    for file in files:
-        find_file = file.lower()
-        for branch in branches:
-            if re.search(r'\d.* ' + branch.lower() + '.xml', find_file):
-                xml_files.append(f'{branch}:{file}')
-
-    return xml_files
-
-def getBranchesName()-> list:
-    '''Получение названия филиала'''
-
-    branche_name = []
-
-    braches = config['BRANCHES']
-    for branch in braches:
-        branche_name.append(braches[branch])
-
-    return branche_name
-
-result = autofind_xml(getBranchesName())
-print(result)
+sys.exit(app.exec_())
