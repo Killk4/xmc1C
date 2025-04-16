@@ -72,7 +72,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
            <item>
-            <widget class="QComboBox" name="comboBox_2">
+            <widget class="QComboBox" name="month_box">
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -144,7 +144,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox">
+            <widget class="QComboBox" name="year_box">
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -219,7 +219,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_5">
+            <widget class="QPushButton" name="JK_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -256,7 +256,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="IL_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -293,7 +293,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_8">
+            <widget class="QPushButton" name="KB_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -330,7 +330,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_4">
+            <widget class="QPushButton" name="KV_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -367,7 +367,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_12">
+            <widget class="QPushButton" name="KP_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -404,7 +404,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_6">
+            <widget class="QPushButton" name="NR_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -441,7 +441,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_7">
+            <widget class="QPushButton" name="PK_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -478,7 +478,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_11">
+            <widget class="QPushButton" name="SL_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -515,7 +515,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_9">
+            <widget class="QPushButton" name="SK_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -552,7 +552,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_10">
+            <widget class="QPushButton" name="SM_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
@@ -589,7 +589,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="UN_select_btn">
              <property name="text">
               <string>Выбрать</string>
              </property>
