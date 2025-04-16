@@ -1,13 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import re
 
 class Ui_MainWindow(object):
 
-    def __init__(self, font: str = "Tahoma", font_size: int = 14, month_default: int = 4):
+    def __init__(self, font: str = "Tahoma", font_size: int = 14, month_default: int = 4, files_path = ""):
         self.font = font
         self.font_size = font_size
         self.month_default = month_default - 1
+        self.files_path = files_path
 
     def setupUi(self, MainWindow):
+
+        self.window = MainWindow
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(882, 520)
         MainWindow.setMinimumSize(QtCore.QSize(882, 520))
@@ -377,37 +382,37 @@ class Ui_MainWindow(object):
         self.year_box.setItemText(4, _translate("MainWindow", "2024"))
         self.year_box.setItemText(5, _translate("MainWindow", "2025"))
         self.JK_lable.setText(_translate("MainWindow", "ЖК"))
-        self.JK_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.JK_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.JK_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.IL_label.setText(_translate("MainWindow", "ил"))
-        self.IL_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.IL_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.IL_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.KB_label.setText(_translate("MainWindow", "КБ"))
-        self.KB_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.KB_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.KB_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.KV_label.setText(_translate("MainWindow", "Кирова"))
-        self.KV_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.KV_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.KV_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.KP_label.setText(_translate("MainWindow", "Крупской"))
-        self.KP_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.KP_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.KP_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.NR_label.setText(_translate("MainWindow", "Нарат"))
-        self.NR_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.NR_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.NR_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.PK_label.setText(_translate("MainWindow", "ПК"))
-        self.PK_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.PK_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.PK_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.SL_label.setText(_translate("MainWindow", "Салют"))
-        self.SL_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.SL_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.SL_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.SK_label.setText(_translate("MainWindow", "СКФНКЦ"))
-        self.SK_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.SK_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.SK_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.SM_label.setText(_translate("MainWindow", "Смена"))
-        self.SM_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.SM_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.SM_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.UN_label.setText(_translate("MainWindow", "Юность"))
-        self.UN_file_label.setText(_translate("MainWindow", "... Крупской.xml"))
+        self.UN_file_label.setText(_translate("MainWindow", "Не выбрано"))
         self.UN_select_btn.setText(_translate("MainWindow", "Выбрать"))
         self.autofind_btn.setText(_translate("MainWindow", "Найти автоматически"))
         self.check_btn.setText(_translate("MainWindow", "Проверка"))
@@ -420,17 +425,17 @@ class Ui_MainWindow(object):
 
         ### Клики ###
         #  Выбор файла  #
-        # self.JK_select_btn.clicked.connect()
-        # self.IL_select_btn.clicked.connect()
-        # self.KB_select_btn.clicked.connect()
-        # self.KV_select_btn.clicked.connect()
-        # self.KP_select_btn.clicked.connect()
-        # self.NR_select_btn.clicked.connect()
-        # self.PK_select_btn.clicked.connect()
-        # self.SL_select_btn.clicked.connect()
-        # self.SK_select_btn.clicked.connect()
-        # self.SM_select_btn.clicked.connect()
-        # self.UN_select_btn.clicked.connect()
+        self.JK_select_btn.clicked.connect(self.on_JK_select_btn_clicked)
+        self.IL_select_btn.clicked.connect(self.on_IL_select_btn_clicked)
+        self.KB_select_btn.clicked.connect(self.on_KB_select_btn_clicked)
+        self.KV_select_btn.clicked.connect(self.on_KV_select_btn_clicked)
+        self.KP_select_btn.clicked.connect(self.on_KP_select_btn_clicked)
+        self.NR_select_btn.clicked.connect(self.on_NR_select_btn_clicked)
+        self.PK_select_btn.clicked.connect(self.on_PK_select_btn_clicked)
+        self.SL_select_btn.clicked.connect(self.on_SL_select_btn_clicked)
+        self.SK_select_btn.clicked.connect(self.on_SK_select_btn_clicked)
+        self.SM_select_btn.clicked.connect(self.on_SM_select_btn_clicked)
+        self.UN_select_btn.clicked.connect(self.on_UN_select_btn_clicked)
 
         # #  Автопоиск файлов  #
         # self.autofind_btn.clicked.connect(self.autofind_btn_clicked)
@@ -438,3 +443,112 @@ class Ui_MainWindow(object):
         # #  Проверка и запуск  #
         # self.check_btn.clicked.connect()
         # self.start_btn.clicked.connect()
+
+    # Выбор имени филиала из всего имени файла
+    def splitShortName(self, file_name: str)->str:
+        pattern = r"([^\s]+).xml$"
+        return re.search(pattern, file_name).group(1)
+
+    # Вызов окна с выбором файла XML
+    def selectXML(self, title: str = "Выбрать файл" ):
+        file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self.window, title, self.files_path, "XMLька(*.xml)")
+        return file_name
+
+    # Обработчик нажатия выбора файла для ЖК
+    def on_JK_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл ЖК')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.JK_SELECT = file_name
+
+            self.JK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для ИЛ
+    def on_IL_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл ИЛ')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.IL_SELECT = file_name
+
+            self.IL_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для КБ
+    def on_KB_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл КБ')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.KB_SELECT = file_name
+
+            self.KB_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Кирова
+    def on_KV_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Кирова')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.KV_SELECT = file_name
+
+            self.KV_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Крупской
+    def on_KP_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Крупской')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.KP_SELECT = file_name
+
+            self.KP_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Нарата
+    def on_NR_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Нарата')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.NR_SELECT = file_name
+
+            self.NR_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для ПК
+    def on_PK_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл ПК')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.PK_SELECT = file_name
+
+            self.PK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Салюта
+    def on_SL_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Салюта')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.SL_SELECT = file_name
+
+            self.SL_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для СКФНКЦ
+    def on_SK_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл СКФНКЦ')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.SK_SELECT = file_name
+
+            self.SK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Смены
+    def on_SM_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Смены')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.SM_SELECT = file_name
+
+            self.SM_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия выбора файла для Юности
+    def on_UN_select_btn_clicked(self):
+        file_name = self.selectXML('Выберите файл Юности')
+        if file_name:
+            print("Выбран файл:", file_name)
+            self.UN_SELECT = file_name
+
+            self.UN_file_label.setText(f'{self.splitShortName(file_name)}.xml')
