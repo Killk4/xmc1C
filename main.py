@@ -33,10 +33,10 @@ main_ui.SK_select_btn.clicked.connect(main_ui.on_SK_select_btn_clicked) # СКФ
 main_ui.SM_select_btn.clicked.connect(main_ui.on_SM_select_btn_clicked) # Санаторий Смена
 main_ui.UN_select_btn.clicked.connect(main_ui.on_UN_select_btn_clicked) # Медицинский центр Юность
 
-# #  Автопоиск файлов  #
+#  Автопоиск файлов  #
 main_ui.autofind_btn.clicked.connect(main_ui.on_autofind_btn_clicked)   # "Найти автоматически"
 
-# #  Проверка и запуск  #
+#  Проверка и запуск  #
 main_ui.check_btn.clicked.connect(main_ui.on_check_btn_clicked)         # "Проверка"
 main_ui.start_btn.clicked.connect(main_ui.on_start_btn_clicked)         # "Запуск"
 
