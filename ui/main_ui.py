@@ -423,27 +423,6 @@ class Ui_MainWindow(object):
         self.about_action.setText(_translate("MainWindow", "О программе"))
         self.checkUpdate_action.setText(_translate("MainWindow", "Проверить обновление"))
 
-        ### Клики ###
-        #  Выбор файла  #
-        self.JK_select_btn.clicked.connect(self.on_JK_select_btn_clicked)
-        self.IL_select_btn.clicked.connect(self.on_IL_select_btn_clicked)
-        self.KB_select_btn.clicked.connect(self.on_KB_select_btn_clicked)
-        self.KV_select_btn.clicked.connect(self.on_KV_select_btn_clicked)
-        self.KP_select_btn.clicked.connect(self.on_KP_select_btn_clicked)
-        self.NR_select_btn.clicked.connect(self.on_NR_select_btn_clicked)
-        self.PK_select_btn.clicked.connect(self.on_PK_select_btn_clicked)
-        self.SL_select_btn.clicked.connect(self.on_SL_select_btn_clicked)
-        self.SK_select_btn.clicked.connect(self.on_SK_select_btn_clicked)
-        self.SM_select_btn.clicked.connect(self.on_SM_select_btn_clicked)
-        self.UN_select_btn.clicked.connect(self.on_UN_select_btn_clicked)
-
-        # #  Автопоиск файлов  #
-        # self.autofind_btn.clicked.connect(self.autofind_btn_clicked)
-
-        # #  Проверка и запуск  #
-        # self.check_btn.clicked.connect()
-        # self.start_btn.clicked.connect()
-
     # Выбор имени филиала из всего имени файла
     def splitShortName(self, file_name: str)->str:
         pattern = r"([^\s]+).xml$"
@@ -552,3 +531,15 @@ class Ui_MainWindow(object):
             self.UN_SELECT = file_name
 
             self.UN_file_label.setText(f'{self.splitShortName(file_name)}.xml')
+
+    # Обработчик нажатия кнопки Автопоиск
+    def on_autofind_btn_clicked(self):
+        pass
+
+    # Обработчик нажатия кнопки Проверки
+    def on_check_btn_clicked(self):
+        pass
+
+    # Обработчик нажатия кнопки Старт
+    def on_start_btn_clicked(self):
+        print('zalupa')
