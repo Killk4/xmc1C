@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from datetime import datetime
 import re
 
 class Ui_MainWindow(object):
@@ -8,6 +9,11 @@ class Ui_MainWindow(object):
         self.font_size = font_size
         self.month_default = month_default - 1
         self.files_path = files_path
+
+        self.log_text = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        "p, li { white-space: pre-wrap; }\n"
+        "</style></head><body style=\" font-family:\'Tahoma\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 
     def setupUi(self, MainWindow):
 
@@ -350,18 +356,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "xml editor"))
-        self.processView.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-        "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-        "p, li { white-space: pre-wrap; }\n"
-        "</style></head><body style=\" font-family:\'Tahoma\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Прогресс ...</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Данилин - основное место работы КБ</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Поиск в других филиалах</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Найден в ПК</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Перенос в КБ</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Чистка данных из ПК</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">...</span></p>\n"
-        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\">Работа программы завершена успешно за ??? секунд.</span></p></body></html>"))
+        self.processView.setHtml(_translate("MainWindow", ""))
         self.month_box.setItemText(0, _translate("MainWindow", "Январь"))
         self.month_box.setItemText(1, _translate("MainWindow", "Февраль"))
         self.month_box.setItemText(2, _translate("MainWindow", "Март"))
@@ -423,6 +418,12 @@ class Ui_MainWindow(object):
         self.about_action.setText(_translate("MainWindow", "О программе"))
         self.checkUpdate_action.setText(_translate("MainWindow", "Проверить обновление"))
 
+    # Функция логирования действий
+    def logs(self, text: str)->None:
+        current_time = datetime.now().time()
+        self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>{current_time.strftime("%H:%M:%S")}</b> {text}</span></p>\n"
+        self.processView.setHtml(self.log_text)
+
     # Выбор имени филиала из всего имени файла
     def splitShortName(self, file_name: str)->str:
         pattern = r"([^\s]+).xml$"
@@ -437,7 +438,7 @@ class Ui_MainWindow(object):
     def on_JK_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл ЖК')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>ЖК")
             self.JK_SELECT = file_name
 
             self.JK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -446,7 +447,7 @@ class Ui_MainWindow(object):
     def on_IL_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл ИЛ')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>ИЛ</b>")
             self.IL_SELECT = file_name
 
             self.IL_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -455,7 +456,7 @@ class Ui_MainWindow(object):
     def on_KB_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл КБ')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>КБ</b>")
             self.KB_SELECT = file_name
 
             self.KB_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -464,7 +465,7 @@ class Ui_MainWindow(object):
     def on_KV_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Кирова')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Кирова</b>")
             self.KV_SELECT = file_name
 
             self.KV_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -473,7 +474,7 @@ class Ui_MainWindow(object):
     def on_KP_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Крупской')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Крупской</b>")
             self.KP_SELECT = file_name
 
             self.KP_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -482,7 +483,7 @@ class Ui_MainWindow(object):
     def on_NR_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Нарата')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Нарат</b>")
             self.NR_SELECT = file_name
 
             self.NR_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -491,7 +492,7 @@ class Ui_MainWindow(object):
     def on_PK_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл ПК')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>ПК</b>")
             self.PK_SELECT = file_name
 
             self.PK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -500,7 +501,7 @@ class Ui_MainWindow(object):
     def on_SL_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Салюта')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Салют</b>")
             self.SL_SELECT = file_name
 
             self.SL_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -509,7 +510,7 @@ class Ui_MainWindow(object):
     def on_SK_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл СКФНКЦ')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>СКФНКЦ</b>")
             self.SK_SELECT = file_name
 
             self.SK_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -518,7 +519,7 @@ class Ui_MainWindow(object):
     def on_SM_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Смены')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Смена</b>")
             self.SM_SELECT = file_name
 
             self.SM_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -527,7 +528,7 @@ class Ui_MainWindow(object):
     def on_UN_select_btn_clicked(self):
         file_name = self.selectXML('Выберите файл Юности')
         if file_name:
-            print("Выбран файл:", file_name)
+            self.logs(f"Выбран файл: {file_name} для позиции <b>Юность</b>")
             self.UN_SELECT = file_name
 
             self.UN_file_label.setText(f'{self.splitShortName(file_name)}.xml')
@@ -542,4 +543,5 @@ class Ui_MainWindow(object):
 
     # Обработчик нажатия кнопки Старт
     def on_start_btn_clicked(self):
-        print('zalupa')
+        self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_________________________________________________________________________________</b></span></p>\n"
+        self.processView.setHtml(self.log_text)
