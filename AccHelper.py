@@ -116,10 +116,14 @@ class XML:
 
         xml_files = []                                          # Список xml файлов
 
+        branches_list = []
+        for item in branches:
+            branches_list.append(branches[item])
+
         # Сопоставуляем файлы с названиями ветвей
         for file in files:
             find_file = file.lower()
-            for branch in branches:
+            for branch in branches_list:
                 if re.search(r'\d.* ' + branch.lower() + '.xml', find_file):
                     xml_files.append(f'{branch}:{file}')        # Добавляем в список xml файлов филиал и его файл (Филиал:Файл)
 
