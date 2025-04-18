@@ -1,6 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 import re
+import AccHelper
+import replaceUZiZP
+
+config_soft = AccHelper.Config().read_config_file() # Чтение фала конфигурации
+xml = AccHelper.XML(config_soft)                    # Объект работы с XML
+branches = AccHelper.Branches(config_soft)          # Объект работы с филиалами
+rp = replaceUZiZP.replace()
 
 class Ui_MainWindow(object):
 
@@ -535,7 +542,61 @@ class Ui_MainWindow(object):
 
     # Обработчик нажатия кнопки Автопоиск
     def on_autofind_btn_clicked(self):
-        pass
+        tmp = ''
+        branch_files = xml.autofind_xml(config_soft['BRANCHES'], config_soft['SETTINGS']['months_path'])
+        for file in branch_files:
+            item = file.split(':')
+            for branch in config_soft['BRANCHES']:
+                if item[0] == config_soft['BRANCHES'][branch]:
+                    tmp = branch
+                else:
+                    tmp = ''
+
+                if tmp.lower() == 'jk':
+                    self.logs(f"Выбран файл: {file} для позиции <b>ЖК</b>")
+                    self.JK_SELECT = file
+                    self.JK_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'il':
+                    self.logs(f"Выбран файл: {file} для позиции <b>ИЛ</b>")
+                    self.IL_SELECT = file
+                    self.IL_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'kb':
+                    self.logs(f"Выбран файл: {file} для позиции <b>КБ</b>")
+                    self.KB_SELECT = file
+                    self.KB_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'kv':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Кирова</b>")
+                    self.KV_SELECT = file
+                    self.KV_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'kp':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Крупской</b>")
+                    self.KP_SELECT = file
+                    self.KP_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'nr':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Нарат</b>")
+                    self.NR_SELECT = file
+                    self.NR_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'pk':
+                    self.logs(f"Выбран файл: {file} для позиции <b>ПК</b>")
+                    self.PK_SELECT = file
+                    self.PK_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'sl':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Салют</b>")
+                    self.SL_SELECT = file
+                    self.SL_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'sk':
+                    self.logs(f"Выбран файл: {file} для позиции <b>СКФНКЦ</b>")
+                    self.SK_SELECT = file
+                    self.SK_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'sm':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Смена</b>")
+                    self.SM_SELECT = file
+                    self.SM_file_label.setText(f'{self.splitShortName(file)}.xml')
+                if tmp.lower() == 'un':
+                    self.logs(f"Выбран файл: {file} для позиции <b>Юность</b>")
+                    self.UN_SELECT = file
+                    self.UN_file_label.setText(f'{self.splitShortName(file)}.xml')
+
 
     # Обработчик нажатия кнопки Проверки
     def on_check_btn_clicked(self):
@@ -543,5 +604,6 @@ class Ui_MainWindow(object):
 
     # Обработчик нажатия кнопки Старт
     def on_start_btn_clicked(self):
-        self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_________________________________________________________________________________</b></span></p>\n"
+        self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_______________________________________________________________________________</b></span></p>\n"
         self.processView.setHtml(self.log_text)
+        rp.start()

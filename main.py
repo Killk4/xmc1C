@@ -16,8 +16,6 @@ main_ui = mui.Ui_MainWindow(month_default=3,
                        font_size=int(config_soft['SETTINGS']['font_size']),
                        files_path=config_soft['SETTINGS']['months_path'])
 
-print(xml.autofind_xml(config_soft['BRANCHES'], config_soft['SETTINGS']['months_path']))
-
 # Инициализация элементов формы
 main_ui.setupUi(MainWindow)
 
