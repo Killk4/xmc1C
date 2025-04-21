@@ -1,7 +1,26 @@
 import os
 import copy
 import xml.etree.ElementTree as ET
+from PyQt5.QtCore import QThread, pyqtSignal
+class ReplaceThread(QThread):
+    progress = pyqtSignal(str)
 
+    def __init__(self, path):
+        super().__init__()
+        self.path = path
+
+    def __init__(self, path):
+        super().__init__()
+        self.path = path
+
+    def run(self):
+        from replaceUZiZP import replace
+
+        def progress_callback(percent_text):
+            self.progress.emit(percent_text)
+
+        rp = replace(path=self.path, progress_callback=progress_callback)
+        rp.start()
 class replace:
 
     def __init__(self, path: str, progress_callback=None):

@@ -4,6 +4,10 @@ import re
 import AccHelper
 import replaceUZiZP
 
+from PyQt5.QtCore import QThread
+from replaceUZiZP import ReplaceThread
+
+
 config_soft = AccHelper.Config().read_config_file() # Чтение фала конфигурации
 xml = AccHelper.XML(config_soft)                    # Объект работы с XML
 branches = AccHelper.Branches(config_soft)          # Объект работы с филиалами
@@ -16,12 +20,11 @@ class Ui_MainWindow(object):
         self.font_size = font_size
         self.month_default = month_default - 1
         self.files_path = files_path
-
         self.log_text = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
         "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
         "p, li { white-space: pre-wrap; }\n"
         "</style></head><body style=\" font-family:\'Tahoma\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-
+        self.replace_thread = None
         self.rp = None
 
     def setupUi(self, MainWindow):
@@ -612,10 +615,6 @@ class Ui_MainWindow(object):
         self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_______________________________________________________________________________</b></span></p>\n"
         self.processView.setHtml(self.log_text)
 
-        self.rp = replaceUZiZP.replace(
-            path='D:/- dev/xmc1C/files/2025/test',
-            progress_callback=self.log_progress
-        )
-
-        self.logs("Обработка завершена.")
-        rp.start()
+        self.replace_thread = ReplaceThread(path='D:/- dev/xmc1C/files/2025/test')
+        self.replace_thread.progress.connect(self.logs)
+        self.replace_thread.start()
