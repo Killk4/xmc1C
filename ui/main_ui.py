@@ -7,7 +7,7 @@ import replaceUZiZP
 config_soft = AccHelper.Config().read_config_file() # Чтение фала конфигурации
 xml = AccHelper.XML(config_soft)                    # Объект работы с XML
 branches = AccHelper.Branches(config_soft)          # Объект работы с филиалами
-rp = replaceUZiZP.replace()
+rp = replaceUZiZP.replace(path='D:/- dev/xmc1C/files/2025/test')
 
 class Ui_MainWindow(object):
 
@@ -21,6 +21,8 @@ class Ui_MainWindow(object):
         "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
         "p, li { white-space: pre-wrap; }\n"
         "</style></head><body style=\" font-family:\'Tahoma\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+
+        self.rp = None
 
     def setupUi(self, MainWindow):
 
@@ -431,6 +433,9 @@ class Ui_MainWindow(object):
         self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>{current_time.strftime("%H:%M:%S")}</b> {text}</span></p>\n"
         self.processView.setHtml(self.log_text)
 
+    def log_progress(self, percent_text: str) -> None:
+        self.logs(f"Обработка: {percent_text}")
+
     # Выбор имени филиала из всего имени файла
     def splitShortName(self, file_name: str)->str:
         pattern = r"([^\s]+).xml$"
@@ -606,4 +611,11 @@ class Ui_MainWindow(object):
     def on_start_btn_clicked(self):
         self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_______________________________________________________________________________</b></span></p>\n"
         self.processView.setHtml(self.log_text)
+
+        self.rp = replaceUZiZP.replace(
+            path='D:/- dev/xmc1C/files/2025/test',
+            progress_callback=self.log_progress
+        )
+
+        self.logs("Обработка завершена.")
         rp.start()
