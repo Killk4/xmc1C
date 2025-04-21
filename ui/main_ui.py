@@ -135,7 +135,7 @@ class Ui_MainWindow(object):
             if int(text[:-1]) == 100:
                 self.end_time = time.time()
                 elapsed_time = self.end_time - self.start_time
-                self.processView.setHtml(elapsed_time)
+                self.processView.setHtml(f'{self.log_text}Скрипт завершил работу за {str(elapsed_time)} секунд.\n')
             return None
         self.processView.setHtml(self.log_text)
 
