@@ -11,7 +11,7 @@ from replaceUZiZP import ReplaceThread
 config_soft = AccHelper.Config().read_config_file() # Чтение фала конфигурации
 xml = AccHelper.XML(config_soft)                    # Объект работы с XML
 branches = AccHelper.Branches(config_soft)          # Объект работы с филиалами
-rp = replaceUZiZP.replace(path='D:/- dev/xmc1C/files/2025/test')
+rp = replaceUZiZP.replace(path=config_soft['SETTINGS']['months_path'])
 
 class Ui_MainWindow(object):
 
@@ -433,7 +433,12 @@ class Ui_MainWindow(object):
     # Функция логирования действий
     def logs(self, text: str)->None:
         current_time = datetime.now().time()
-        self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>{current_time.strftime("%H:%M:%S")}</b> {text}</span></p>\n"
+        self.log_text = (
+                            f"{self.log_text}"
+                            f"<p style='margin:0; -qt-block-indent:0; text-indent:0px;'>"
+                            f"<span style='font-family:\"MS Shell Dlg 2\"; font-size:8.25pt; color:#949494;'>"
+                            f"<b>{current_time.strftime('%H:%M:%S')}</b> {text}</span></p>\n"
+                        )
         self.processView.setHtml(self.log_text)
 
     def log_progress(self, percent_text: str) -> None:
@@ -615,6 +620,6 @@ class Ui_MainWindow(object):
         self.log_text = f"{self.log_text}<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; color:#949494;\"><b>_______________________________________________________________________________</b></span></p>\n"
         self.processView.setHtml(self.log_text)
 
-        self.replace_thread = ReplaceThread(path='D:/- dev/xmc1C/files/2025/test')
+        self.replace_thread = ReplaceThread(path=config_soft['SETTINGS']['months_path'])
         self.replace_thread.progress.connect(self.logs)
         self.replace_thread.start()
