@@ -112,7 +112,7 @@ class XML:
     def autofind_xml(self, branches: list, path: list, year: int = 2025, month: str = '1.Январь')-> list:
         '''Автовыбор (сопоставление) имён файлов с названиями филиалов'''
         
-        files = os.listdir(f'{path}/{year}/{month}/')           # Получаем список файлов в папке
+        files = os.listdir(f'{path}/')                          # Получаем список файлов в папке
 
         xml_files = []                                          # Список xml файлов
 
