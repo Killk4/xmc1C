@@ -2,12 +2,9 @@ import os
 import copy
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QThread, pyqtSignal
+
 class ReplaceThread(QThread):
     progress = pyqtSignal(str)
-
-    def __init__(self, path):
-        super().__init__()
-        self.path = path
 
     def __init__(self, path):
         super().__init__()
@@ -21,6 +18,7 @@ class ReplaceThread(QThread):
 
         rp = replace(path=self.path, progress_callback=progress_callback)
         rp.start()
+
 class replace:
 
     def __init__(self, path: str, progress_callback=None):
@@ -61,19 +59,23 @@ class replace:
                 for k, v in el.attrib.items()
             }
 
+    def remove_zl_from_tree(self, tree, zl_element):
+        for parent in tree.getroot().iter():
+            for child in list(parent):
+                if child is zl_element:
+                    parent.remove(child)
+                    return
+
     def start(self):
-        # --- Сбор данных ---
-        snils_to_main = {}  # СНИЛС -> (zl_element, tree, file)
-        all_zl_entries = []  # [(snils, zl, tree, file)]
+        snils_to_main = {}
+        all_zl_entries = []
 
         for file in self.input_files:
             tree = ET.parse(file)
             root = tree.getroot()
             self.strip_ns(root)
 
-            for zl in root.iter():
-                if not zl.tag.endswith('ЗЛ'):
-                    continue
+            for zl in root.iter('ЗЛ'):
                 snils = self.get_snils(zl)
                 if not snils:
                     continue
@@ -85,7 +87,6 @@ class replace:
                         snils_to_main[snils] = (zl, tree, file)
                         break
 
-        # --- Обработка и прогресс ---
         total = len(snils_to_main)
         done = 0
         last_percent = -1
@@ -105,23 +106,28 @@ class replace:
                 if szpgos_other is None:
                     continue
 
-                uzizp_list = self.get_uzizp_blocks(zl)
-                for uz in uzizp_list:
-                    szpgos_main.append(copy.deepcopy(uz))
-                    szpgos_other.remove(uz)
-                    modified_secondary_files.add(file)
+                for uz in self.get_uzizp_blocks(zl):
+                    uz_copy = copy.deepcopy(uz)
 
-            # Сохраняем основной файл
+                    # Меняем <Вид> с 3 на 2
+                    for elem in uz_copy.iter():
+                        if elem.tag == 'Вид' and elem.text == '3':
+                            elem.text = '2'
+
+                    szpgos_main.append(uz_copy)
+
+                # Удаление <ЗЛ>
+                self.remove_zl_from_tree(tree, zl)
+                modified_secondary_files.add(file)
+
             main_tree.write(main_file, encoding='utf-8', xml_declaration=True)
 
-            # Сохраняем вторичные файлы
             for f in modified_secondary_files:
                 for _, _, tree_candidate, tree_file in all_zl_entries:
                     if tree_file == f:
                         tree_candidate.write(f, encoding='utf-8', xml_declaration=True)
                         break
 
-            # Прогресс
             done += 1
             percent = int((done / total) * 100)
             if percent != last_percent:
